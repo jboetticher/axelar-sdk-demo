@@ -4,9 +4,9 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@axelar-network/axelar-cgp-solidity/interfaces/IAxelarGateway.sol";
-import "@axelar-network/axelar-cgp-solidity/interfaces/IAxelarGasService.sol";
-import "@axelar-network/axelar-cgp-solidity/interfaces/IAxelarGasExecutable.sol";
+import "@axelar-network/axelar-cgp-solidity/contracts/interfaces/IAxelarGateway.sol";
+import "@axelar-network/axelar-cgp-solidity/contracts/interfaces/IAxelarGasService.sol";
+import "@axelar-network/axelar-cgp-solidity/contracts/interfaces/IAxelarExecutable.sol";
 import "./axelar/StringAddressUtils.sol";
 
 // Allows users to mint an NFT, but only cross chain.
