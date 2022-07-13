@@ -1,5 +1,5 @@
 const hre = require("hardhat");
-const { getGatewayAddress, gasReceiverAddress } = require("../gatewayGasReceiver");
+const { getGatewayAddress, gasReceiverAddress } = require("./gatewayGasReceiver");
 const ethers = hre.ethers;
 
 async function main() {

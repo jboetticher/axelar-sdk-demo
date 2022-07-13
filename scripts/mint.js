@@ -1,6 +1,6 @@
 const hre = require("hardhat");
 const { AxelarQueryAPI, Environment, EvmChain, GasToken } = require("@axelar-network/axelarjs-sdk");
-const { getGatewayAddress } = require("../gatewayGasReceiver");
+const { getGatewayAddress } = require("./gatewayGasReceiver");
 
 
 const ethers = hre.ethers;
