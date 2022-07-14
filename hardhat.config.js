@@ -1,4 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("./scripts/axelarStatus.js");
 
 const { privateKey } = require('./secrets.json');
 

@@ -5,6 +5,7 @@ coverage.json
 typechain
 typechain-types
 secrets.json
+.DS_Store
 
 #Hardhat files
 cache
