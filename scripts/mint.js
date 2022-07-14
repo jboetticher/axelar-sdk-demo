@@ -21,8 +21,11 @@ Use the constants below to change the parameters of the script.
 
 const ORIGIN_CHAIN = EvmChain.MOONBEAM;
 const DESTINATION_CHAIN = EvmChain.FANTOM;
-const ORIGIN_CHAIN_ADDRESS = '0x9f238B9371f6f12e1C0c950973DacfdFd52340Cf';
-const DESTINATION_CHAIN_ADDRESS = '0xaf108eF646c8214c9DD9C13CBC5fadf964Bbe293'; //'0x7F553ebD8DcDDef432a7ebC35f74ec9926B00AD0';
+const ORIGIN_CHAIN_ADDRESS = '0xbfb326210b9Ae12DFD30A5DE307f51C95E84700e';
+const DESTINATION_CHAIN_ADDRESS = '0xaf108eF646c8214c9DD9C13CBC5fadf964Bbe293'; // currently set to AxelarAcceptEverything
+
+// moonbase alpha:      0xbfb326210b9Ae12DFD30A5DE307f51C95E84700e
+// fantom testnet:      0xF994e877C93dA800B215f178d6749486fe9315A3
 
 async function main() {
     if (hre.network.name !== 'moonbase') {
