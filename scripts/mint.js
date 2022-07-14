@@ -1,6 +1,6 @@
 const hre = require("hardhat");
 const { AxelarQueryAPI, Environment, EvmChain, GasToken } = require("@axelar-network/axelarjs-sdk");
-const { getGatewayAddress } = require("./gatewayGasReceiver");
+const { getGatewayAddress, getWDEVAddress } = require("./gatewayGasReceiver");
 
 
 const ethers = hre.ethers;
@@ -19,9 +19,10 @@ Use the constants below to change the parameters of the script.
 
 */
 
+const ORIGIN_CHAIN = EvmChain.MOONBEAM;
 const DESTINATION_CHAIN = EvmChain.FANTOM;
-const ORIGIN_CHAIN_ADDRESS = '0xAa8482bF2473084de146182E67efCD5D308c4031';
-const DESTINATION_CHAIN_ADDRESS = '0x7F553ebD8DcDDef432a7ebC35f74ec9926B00AD0';
+const ORIGIN_CHAIN_ADDRESS = '0x9f238B9371f6f12e1C0c950973DacfdFd52340Cf';
+const DESTINATION_CHAIN_ADDRESS = '0xaf108eF646c8214c9DD9C13CBC5fadf964Bbe293'; //'0x7F553ebD8DcDDef432a7ebC35f74ec9926B00AD0';
 
 async function main() {
     if (hre.network.name !== 'moonbase') {
@@ -32,7 +33,7 @@ async function main() {
 
     // Gets the gateway
     const gatewayAddress = getGatewayAddress(hre.network.name);
-    const MOONBASE_WDEV_ADDRESS = '0x1436aE0dF0A8663F18c0Ec51d7e2E46591730715';
+    const MOONBASE_WDEV_ADDRESS = getWDEVAddress(ORIGIN_CHAIN);
 
     // Connect to contract
     const CrossChainNFT = await ethers.getContractFactory("CrossChainNFT");

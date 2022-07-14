@@ -57,12 +57,14 @@ contract CrossChainNFT is ERC721, IAxelarExecutable {
         wDev.approve(address(gateway), amount);
 
         // Pay for gas. 
-        // We could also send the contract call here but then the sourceAddress will be that of the gas receiver which is a problem later.
-        gasService.payNativeGasForContractCall{value: msg.value}(
+        // This is a gas service SPECIFICALLY for sending with token!
+        gasService.payNativeGasForContractCallWithToken{value: msg.value}(
             address(this),
             destinationChain,
             destinationAddress,
             payload,
+            "WDEV",
+            amount,
             msg.sender
         );
 
