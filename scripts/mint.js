@@ -43,6 +43,7 @@ async function main() {
     // wrap => transfer to contract => contract transfers to Gateway
     const wDEVPayment = ethers.utils.parseUnits("0.05", "ether");
     const wDEV = await ethers.getContractAt( "WETH9", MOONBASE_WDEV_ADDRESS);
+    
     const wrapTx = await wDEV.deposit({ value: wDEVPayment });
     console.log("Wrap transaction hash: ", wrapTx.hash);
 
