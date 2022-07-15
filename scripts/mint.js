@@ -1,6 +1,6 @@
 const hre = require("hardhat");
 const { AxelarQueryAPI, Environment, EvmChain, GasToken } = require("@axelar-network/axelarjs-sdk");
-const { getGatewayAddress, getWDEVAddress } = require("./gatewayGasReceiver");
+const { getGatewayAddress } = require("./gatewayGasReceiver");
 
 
 const ethers = hre.ethers;
@@ -21,26 +21,36 @@ Use the constants below to change the parameters of the script.
 
 const ORIGIN_CHAIN = EvmChain.MOONBEAM;
 const DESTINATION_CHAIN = EvmChain.FANTOM;
-const ORIGIN_CHAIN_ADDRESS = '0xbfb326210b9Ae12DFD30A5DE307f51C95E84700e';
-const DESTINATION_CHAIN_ADDRESS = '0xaf108eF646c8214c9DD9C13CBC5fadf964Bbe293'; // currently set to AxelarAcceptEverything
+const ORIGIN_CHAIN_ADDRESS = '0xA11e8F4FF58aa71410f95D74c3DeFFF584F20FdF';
+const DESTINATION_CHAIN_ADDRESS = '0x62918fB7f3fd634A1FB2e2f8381A20c1279CE129'; // currently set to AxelarAcceptEverything
 
 // moonbase alpha:      0xbfb326210b9Ae12DFD30A5DE307f51C95E84700e
 // fantom testnet:      0xF994e877C93dA800B215f178d6749486fe9315A3
 
 async function main() {
-    if (hre.network.name !== 'moonbase') {
-        console.log("Can only be run on Moonbase Alpha!");
-        process.exit(1);
-    }
+    await hre.run('compile');
 
-
-    // Gets the gateway
-    const gatewayAddress = getGatewayAddress(hre.network.name);
-    const MOONBASE_WDEV_ADDRESS = getWDEVAddress(ORIGIN_CHAIN);
-
-    // Connect to contract
+    // Get contracts & connect to NFT
     const CrossChainNFT = await ethers.getContractFactory("CrossChainNFT");
     const nft = CrossChainNFT.attach(ORIGIN_CHAIN_ADDRESS);
+
+    // Get the wDev address that Axelar uses & wrap tokens
+    const GATEWAY_ADDRESS = getGatewayAddress(hre.network.name);
+    const gateway = await ethers.getContractAt("IAxelarGateway", GATEWAY_ADDRESS);
+    const MOONBASE_WDEV_ADDRESS = await gateway.tokenAddresses("WDEV");
+
+    // Wrap + Approve WDEV to be used by the NFT contract
+    // wrap => transfer to contract => contract transfers to Gateway
+    const wDEVPayment = ethers.utils.parseUnits("0.05", "ether");
+    const wDEV = await ethers.getContractAt( "WETH9", MOONBASE_WDEV_ADDRESS);
+    const wrapTx = await wDEV.deposit({ value: wDEVPayment });
+    console.log("Wrap transaction hash: ", wrapTx.hash);
+
+    const approveTx = await wDEV.approve( ORIGIN_CHAIN_ADDRESS, wDEVPayment  );
+    console.log("Approve transaction hash: ", approveTx.hash);
+
+    console.log("Awaiting transaction confirmations...");
+    await ethers.provider.waitForTransaction(approveTx.hash, 3);
 
     /*
     Here we attempt to estimate the gas we have to pay for.
@@ -57,7 +67,7 @@ async function main() {
     */
     const estimateGasUsed = 400000;
     const gasFee = await sdk.estimateGasFee(
-        EvmChain.MOONBEAM,
+        ORIGIN_CHAIN,
         DESTINATION_CHAIN,
         GasToken.GLMR,
         estimateGasUsed
@@ -65,22 +75,7 @@ async function main() {
     const gasFeeToHuman = ethers.utils.formatEther(ethers.BigNumber.from(gasFee));
     console.log(`Cross-Chain Gas Fee: ${gasFee} Wei / ${gasFeeToHuman} Ether`);
 
-    // Approve WDEV to be used by the NFT contract (transfer to contract, contract transfers to Gateway)
-    const wDEV = await ethers.getContractAt(
-        "IERC20", 
-        MOONBASE_WDEV_ADDRESS
-    );
-    const approveTx = await wDEV.approve(
-        ORIGIN_CHAIN_ADDRESS, 
-        ethers.utils.parseUnits("0.05", "ether")
-    );
-    // there's an issue with approval. I think it doesn't register until next block
-    console.log("Approved: ", ethers.utils.parseUnits("0.05", "ether")); 
-    console.log("Approve transaction hash: ", approveTx.hash);
-    console.log("Awaiting transaction confirmations...");
-
     // Begin the minting
-    await ethers.provider.waitForTransaction(approveTx.hash, 3);
     const mintRes = await nft.mintXCNFT(
         DESTINATION_CHAIN_ADDRESS,
         DESTINATION_CHAIN,
