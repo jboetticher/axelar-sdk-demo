@@ -21,11 +21,11 @@ Use the constants below to change the parameters of the script.
 
 const ORIGIN_CHAIN = EvmChain.MOONBEAM;
 const DESTINATION_CHAIN = EvmChain.FANTOM;
-const ORIGIN_CHAIN_ADDRESS = '0xA11e8F4FF58aa71410f95D74c3DeFFF584F20FdF';
-const DESTINATION_CHAIN_ADDRESS = '0x62918fB7f3fd634A1FB2e2f8381A20c1279CE129'; // currently set to AxelarAcceptEverything
+const ORIGIN_CHAIN_ADDRESS = '0x28B465072e40496154088a92D7f98f295F9c78E9';
+const DESTINATION_CHAIN_ADDRESS = '0xf9e7DEF9c01345794c9c4c3a17DeF0e5a677C10E'; // currently set to AxelarAcceptEverything
 
-// moonbase alpha:      0xbfb326210b9Ae12DFD30A5DE307f51C95E84700e
-// fantom testnet:      0xF994e877C93dA800B215f178d6749486fe9315A3
+// moonbase alpha:      0x28B465072e40496154088a92D7f98f295F9c78E9
+// fantom testnet:      0xf9e7DEF9c01345794c9c4c3a17DeF0e5a677C10E
 
 async function main() {
     await hre.run('compile');
@@ -41,7 +41,7 @@ async function main() {
 
     // Wrap + Approve WDEV to be used by the NFT contract
     // wrap => transfer to contract => contract transfers to Gateway
-    const wDEVPayment = ethers.utils.parseUnits("0.05", "ether");
+    const wDEVPayment = ethers.utils.parseUnits("0.13", "ether");
     const wDEV = await ethers.getContractAt( "WETH9", MOONBASE_WDEV_ADDRESS);
     
     const wrapTx = await wDEV.deposit({ value: wDEVPayment });
@@ -80,6 +80,7 @@ async function main() {
     const mintRes = await nft.mintXCNFT(
         DESTINATION_CHAIN_ADDRESS,
         DESTINATION_CHAIN,
+        wDEVPayment,
         { value: gasFee }
     );
     console.log("Minting transaction hash: ", mintRes.hash);

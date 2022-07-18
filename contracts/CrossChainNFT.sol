@@ -46,13 +46,13 @@ contract CrossChainNFT is ERC721, IAxelarExecutable {
 
     function mintXCNFT(
         string memory destinationAddress,
-        string memory destinationChain
+        string memory destinationChain,
+        uint256 amount
     ) external payable {
         // Create the payload.
         bytes memory payload = abi.encode(msg.sender);
         
         // This contract takes the tokens from your account and then puts them into the gateway
-        uint256 amount = 0.05 ether;
         wDev.transferFrom(msg.sender, address(this), amount);
         wDev.approve(address(gateway), amount);
 
