@@ -52,7 +52,7 @@ contract CrossChainNFT is ERC721, IAxelarExecutable {
         // Create the payload.
         bytes memory payload = abi.encode(msg.sender);
         
-        // This contract takes the tokens from your account and then puts them into the gateway
+        // Takes WDEV from the user and puts them into this contract for the Gateway to take        
         wDev.transferFrom(msg.sender, address(this), amount);
         wDev.approve(address(gateway), amount);
 
