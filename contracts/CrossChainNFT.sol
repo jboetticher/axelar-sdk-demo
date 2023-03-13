@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@axelar-network/axelar-cgp-solidity/contracts/interfaces/IAxelarGateway.sol";
 import "@axelar-network/axelar-cgp-solidity/contracts/interfaces/IAxelarGasService.sol";
 import "@axelar-network/axelar-cgp-solidity/contracts/interfaces/IAxelarExecutable.sol";
-import "./axelar/StringAddressUtils.sol";
 
 // Allows users to mint an NFT, but only cross chain.
 contract CrossChainNFT is ERC721, IAxelarExecutable {
