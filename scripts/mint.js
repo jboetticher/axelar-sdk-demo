@@ -4,7 +4,7 @@ const { getGatewayAddress } = require("./gatewayGasReceiver");
 
 
 const ethers = hre.ethers;
-const sdk = new AxelarQueryAPI({
+const axlearSDK = new AxelarQueryAPI({
     environment: Environment.TESTNET,
 });
 
@@ -67,7 +67,7 @@ async function main() {
     The following code will return DEV amount to pay in gas.
     */
     const estimateGasUsed = 400000;
-    const gasFee = await sdk.estimateGasFee(
+    const gasFee = await axlearSDK.estimateGasFee(
         ORIGIN_CHAIN,
         DESTINATION_CHAIN,
         GasToken.GLMR,

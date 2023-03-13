@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@axelar-network/axelar-cgp-solidity": "^4.0.0",
-    "@axelar-network/axelarjs-sdk": "^0.6.10",
+    "@axelar-network/axelarjs-sdk": "^0.6.18",
     "@openzeppelin/contracts": "^4.7.0",
     "hardhat": "^2.9.9"
   },
