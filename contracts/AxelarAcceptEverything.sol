@@ -8,7 +8,7 @@ pragma solidity ^0.8.9;
 import "@axelar-network/axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarExecutable.sol";
 import { AxelarExecutable } from '@axelar-network/axelar-gmp-sdk-solidity/contracts/executable/AxelarExecutable.sol';
 
-abstract contract AxelarAcceptEverything is AxelarExecutable {
+contract AxelarAcceptEverything is AxelarExecutable {
    constructor(address gateway_) AxelarExecutable(gateway_) { }
 }
 
