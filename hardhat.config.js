@@ -30,6 +30,11 @@ module.exports = {
       url: 'https://rpc.testnet.fantom.network/',
       chainId: 4002,
       accounts: [privateKey]
-    }
+    },
+    sepolia: {
+      url: 'https://ethereum-sepolia.publicnode.com',
+      chainId: 11155111,
+      accounts: [privateKey]
+    },
   }
 };
