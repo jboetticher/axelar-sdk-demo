@@ -4,17 +4,16 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@axelar-network/axelar-cgp-solidity/contracts/interfaces/IAxelarGateway.sol";
-import "@axelar-network/axelar-cgp-solidity/contracts/interfaces/IAxelarGasService.sol";
-import "@axelar-network/axelar-cgp-solidity/contracts/interfaces/IAxelarExecutable.sol";
+import "@axelar-network/axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarGasService.sol";
+import { AxelarExecutable } from '@axelar-network/axelar-gmp-sdk-solidity/contracts/executable/AxelarExecutable.sol';
 
 // Allows users to mint an NFT, but only cross chain.
-contract CrossChainNFT is ERC721, IAxelarExecutable {
+contract CrossChainNFT is ERC721, AxelarExecutable {
     constructor(
         address _gateway,
         IAxelarGasService _gasService,
         IERC20 _wDev
-    ) ERC721("Cross Chain NFT", "XCNFT") IAxelarExecutable(_gateway) {
+    ) ERC721("Cross Chain NFT", "XCNFT") AxelarExecutable(_gateway) {
         gasService = _gasService;
         wDev = _wDev;
     }

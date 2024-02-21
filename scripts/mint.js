@@ -4,7 +4,7 @@ const { getGatewayAddress } = require("./gatewayGasReceiver");
 
 
 const ethers = hre.ethers;
-const axlearSDK = new AxelarQueryAPI({
+const axelarSDK = new AxelarQueryAPI({
     environment: Environment.TESTNET,
 });
 
@@ -19,10 +19,10 @@ Use the constants below to change the parameters of the script.
 
 */
 
-const ORIGIN_CHAIN = EvmChain.MOONBEAM;
-const DESTINATION_CHAIN = EvmChain.FANTOM;
-const ORIGIN_CHAIN_ADDRESS = '0x28B465072e40496154088a92D7f98f295F9c78E9';
-const DESTINATION_CHAIN_ADDRESS = '0xf9e7DEF9c01345794c9c4c3a17DeF0e5a677C10E'; // currently set to AxelarAcceptEverything
+const ORIGIN_CHAIN = "moonbeam";
+const DESTINATION_CHAIN = "ethereum-sepolia";
+const ORIGIN_CHAIN_ADDRESS = '0x0572B488d70e293F3f93Db9580D19aBbBC00F490';
+const DESTINATION_CHAIN_ADDRESS = '0x89f801C7DB23439FDdBad4f913D788F13d1d7494'; // currently set to AxelarAcceptEverything
 
 // moonbase alpha:      0x28B465072e40496154088a92D7f98f295F9c78E9
 // fantom testnet:      0xf9e7DEF9c01345794c9c4c3a17DeF0e5a677C10E
@@ -36,7 +36,8 @@ async function main() {
 
     // Get the wDev address that Axelar uses & wrap tokens
     const GATEWAY_ADDRESS = getGatewayAddress(hre.network.name);
-    const gateway = await ethers.getContractAt("IAxelarGateway", GATEWAY_ADDRESS);
+    const gateway = await ethers.getContractAt("@axelar-network/axelar-gmp-sdk-solidity/contracts/interfaces/IAxelarGateway.sol:IAxelarGateway", GATEWAY_ADDRESS);
+
     const MOONBASE_WDEV_ADDRESS = await gateway.tokenAddresses("WDEV");
 
     // Wrap + Approve WDEV to be used by the NFT contract
@@ -51,7 +52,7 @@ async function main() {
     console.log("Approve transaction hash: ", approveTx.hash);
 
     console.log("Awaiting transaction confirmations...");
-    await ethers.provider.waitForTransaction(approveTx.hash, 3);
+    await ethers.provider.waitForTransaction(approveTx.hash, 1);
 
     /*
     Here we attempt to estimate the gas we have to pay for.
@@ -67,7 +68,7 @@ async function main() {
     The following code will return DEV amount to pay in gas.
     */
     const estimateGasUsed = 400000;
-    const gasFee = await axlearSDK.estimateGasFee(
+    const gasFee = await axelarSDK.estimateGasFee(
         ORIGIN_CHAIN,
         DESTINATION_CHAIN,
         GasToken.GLMR,
